@@ -13,6 +13,7 @@
 import tkinter as tk
 import random
 import tkinter.font as tkFont
+#from tkinter import ttk
 
 ##################### variables globales ##########################
 
@@ -33,6 +34,9 @@ liste_DEFINITF_cellule_code_secret = [0 for i in range(cols)]
 #print(liste_cellule)
 
 stop = 0
+cpt = 0
+tvar = tk.StringVar()
+tvar.set("Cache moi ce code ;)")
 
 ######################### Fonctions ###############################
 def couleur_cellule():
@@ -80,8 +84,8 @@ def couleur_cellule():
     
 def cliqueG_code_secret(event):
     #global x0, y0, x1, y1
-    x = event.x
-    y = event.y
+    x = canvas.canvasx(event.x)
+    y = canvas.canvasy(event.y)
     for i in range(cols):
         x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
         if x > x0 and x < x1 and y > y0 and y < y1 and stop == 0:
@@ -92,8 +96,8 @@ def cliqueG_code_secret(event):
 
 def cliqueD_code_secret(event):
     #global x0, y0, x1, y1
-    x = event.x
-    y = event.y
+    x = canvas.canvasx(event.x)
+    y = canvas.canvasy(event.y)
     for i in range(cols):
         x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
         if x > x0 and x < x1 and y > y0 and y < y1 and stop == 0:
@@ -106,23 +110,34 @@ def cliqueD_code_secret(event):
 
 
 def cacher_code_secret():
-    global liste_DEFINITF_cellule_code_secret, stop
-    liste_DEFINITF_cellule_code_secret = liste_cellule_code_secret
-    print(liste_DEFINITF_cellule_code_secret)
+    global liste_DEFINITF_cellule_code_secret, stop, cpt
+    if stop < 1:
+        liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
+    #print(liste_DEFINITF_cellule_code_secret)
     for i in range(cols):
         liste_cellule_code_secret[i] = 0
     stop = 1
     couleur_cellule()
+    cpt += 1
+    if cpt <= 1:
+        var = 'Effectuer le ' + str(cpt) + 'er essai'
+    elif cpt == 9:
+        var = 'Attention dernier essai !'
+    elif cpt > 9:
+        var = 'Encore une partie ? :)'
+    else:
+        var = 'Effectuer le ' + str(cpt) + 'ème essai'
+    tvar.set(var)
 
 def cliqueG_iteration(event):
-    x = event.x
-    ya = event.y
+    x = canvas.canvasx(event.x)
+    ya = canvas.canvasy(event.y)
     #print(x)
     for y in range(rows):
         for i in range(cols):
             x0, y0, x1, y1 = canvas.coords(liste_cercle[y][i])
             #print(x0, y0, x1, y1)
-            if x > x0 and x < x1 and ya > y0 and ya < y1:# and stop == 0:# and y == y:
+            if x > x0 and x < x1 and ya > y0 and ya < y1 and y == (cpt - 1):
                 liste_cellule[y][i] += 1
                 #print(liste_cellule[y][i])
                 if liste_cellule[y][i] > 8:
@@ -130,14 +145,14 @@ def cliqueG_iteration(event):
     couleur_cellule()
 
 def cliqueD_iteration(event):
-    x = event.x
-    ya = event.y
+    x = canvas.canvasx(event.x)
+    ya = canvas.canvasy(event.y)
     #print(x)
     for y in range(rows):
         for i in range(cols):
             x0, y0, x1, y1 = canvas.coords(liste_cercle[y][i])
             #print(x0, y0, x1, y1)
-            if x > x0 and x < x1 and ya > y0 and ya < y1:# and stop == 0:# and y == y:
+            if x > x0 and x < x1 and ya > y0 and ya < y1 and y == (cpt - 1):
                 liste_cellule[y][i] -= 1
                 #print(liste_cellule[y][i])
                 if liste_cellule[y][i] < 1:
@@ -173,7 +188,8 @@ for z in range(4):
 
 canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
-bouton_iteration = tk.Button(racine, text ="Cache moi ce code ;)", command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"))
+
+bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"))
 bouton_iteration.grid(row = 1, column = 0)
 
 scroll_y.config(command = canvas.yview)
@@ -181,6 +197,5 @@ canvas.bind("<Button-1>", cliqueG_code_secret)
 canvas.bind("<Button-1>", cliqueG_iteration, add='+')
 canvas.bind("<Button-2>", cliqueD_code_secret)
 canvas.bind("<Button-2>", cliqueD_iteration, add='+')
-
 
 racine.mainloop()
