@@ -33,11 +33,18 @@ liste_DEFINITF_cellule_code_secret = [0 for i in range(cols)]
 #print(liste_cercle_code_secret)
 #print(liste_cellule)
 
-liste_indicateurs = [[0 for i in range(2)] for j in range(rows)]
-liste_cercle_indicateurs = [[0 for i in range(2)] for j in range(rows)]
+liste_indicateurs_G_haut = [[0 for i in range(2)] for j in range(rows)]
+liste_cercle_indicateurs_G_haut = [[0 for i in range(2)] for j in range(rows)]
+liste_indicateurs_G_bas = [[0 for i in range(2)] for j in range(rows)]
+liste_cercle_indicateurs_G_bas = [[0 for i in range(2)] for j in range(rows)]
+liste_indicateurs_D_haut = [[0 for i in range(2)] for j in range(rows)]
+liste_cercle_indicateurs_D_haut = [[0 for i in range(2)] for j in range(rows)]
+liste_indicateurs_D_bas = [[0 for i in range(2)] for j in range(rows)]
+liste_cercle_indicateurs_D_bas = [[0 for i in range(2)] for j in range(rows)]
 
 stop = 0
 cpt = 0
+pivot = 0
 tvar = tk.StringVar()
 tvar.set("Cache moi ce code ;)")
 
@@ -132,6 +139,7 @@ def cacher_code_secret():
         var = 'Effectuer le ' + str(cpt) + 'ème essai'
     tvar.set(var)
     #print(liste_cellule)
+    indicateurs()
 
 def cliqueG_iteration(event):
     x = canvas.canvasx(event.x)
@@ -166,8 +174,16 @@ def cliqueD_iteration(event):
 def indicateurs():
     for y in range(rows):
         for i in range(cols):
-            if y == (cpt - 1) and liste_cellule[y][i] == liste_DEFINITF_cellule_code_secret:
-                canvas.itemconfigure(liste_cercle_indicateurs[y][i], fill = "white")
+            #print(liste_cellule[y][i])
+            #print(liste_DEFINITF_cellule_code_secret[i])
+            if y == (cpt - 2) and liste_cellule[y][i] == liste_DEFINITF_cellule_code_secret[i]:
+                #print(liste_cellule[y][i])
+                #print(liste_DEFINITF_cellule_code_secret[i])
+                #print(liste_cellule[y][i])
+                if i < 2:
+                    canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][i], fill = "red", outline = "red")
+                else:
+                    canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][i - 2], fill = "red", outline = "red")
 
 
 
@@ -201,15 +217,56 @@ for z in range(4):
 
 #Commencer à x=17 du bord avec des cercle de d=10 et x=6 d'ecart entre eux
 #Commencer à y=172 avec meme d et meme écart
-for y in range(10):
+'''for y in range(10):
     for t in range(2):
         for i in range(2):
-            cercle_indicateurs = canvas.create_oval((17 + (i * 16), 172 + (t * 16) + (y * 100)), ((i * 16) + 27, 182 + (t * 16) + (y * 100)), outline = "blue", width = 5, fill = 'blue')
-            liste_cercle_indicateurs[y][i] = cercle_indicateurs
-"""Indicateurs gauche"""
+            cercle_indicateurs_G = canvas.create_oval((17 + (i * 16), 172 + (t * 16) + (y * 100)), (27 + (i * 16), 182 + (t * 16) + (y * 100)), outline = "white", width = 5, fill = 'white')
+            liste_cercle_indicateurs_G[y][i] = cercle_indicateurs_G
+"""Indicateurs gauche, cercles de diamètre 10 séparés de x et y = 6 pxl"""
 #print(canvas.coords(liste_cercle_indicateurs[0][0]))
 #print(canvas.coords(liste_cercle[0][0]))
 
+for y in range(10):
+    for t in range(2):
+        for i in range(2):
+            cercle_indicateurs_D = canvas.create_oval((447 + (i * 16), 172 + (t * 16) + (y * 100)), (457 + (i * 16), 182 + (t * 16) + (y * 100)), outline = "red", width = 5, fill = 'white')
+            liste_cercle_indicateurs_D[y][i] = cercle_indicateurs_D'''
+
+#print(cercle_indicateurs_D)
+
+for y in range(10):
+    for i in range(2):
+        cercle_indicateurs_G_haut = canvas.create_oval((17 + (i * 16), 172 + (y * 100)), (27 + (i * 16), 182 + (y * 100)), outline = "white", width = 5, fill = 'white')
+        liste_cercle_indicateurs_G_haut[y][i] = cercle_indicateurs_G_haut
+
+for y in range(10):
+    for i in range(2):
+        cercle_indicateurs_G_bas = canvas.create_oval((17 + (i * 16), 188 + (y * 100)), (27 + (i * 16), 198 + (y * 100)), outline = "white", width = 5, fill = 'white')
+        liste_cercle_indicateurs_G_bas[y][i] = cercle_indicateurs_G_bas
+
+
+for y in range(10):
+    for i in range(2):
+        cercle_indicateurs_D_haut = canvas.create_oval((447 + (i * 16), 172 + (y * 100)), (457 + (i * 16), 182 + (y * 100)), outline = "white", width = 5, fill = 'white')
+        liste_cercle_indicateurs_D_haut[y][i] = cercle_indicateurs_D_haut
+
+for y in range(10):
+    for i in range(2):
+        cercle_indicateurs_D_bas = canvas.create_oval((447 + (i * 16), 188 + (y * 100)), (457 + (i * 16), 198 + (y * 100)), outline = "white", width = 5, fill = 'white')
+        liste_cercle_indicateurs_D_bas[y][i] = cercle_indicateurs_D_bas
+
+
+'''for y in range(20):
+    for i in range(2):
+        if pivot == 0 or f < r:
+            cercle_indicateurs_D = canvas.create_oval((17 + (i * 16), 172 + pivot + (y * 100)), (27 + (i * 16), 182 + pivot + (y * 100)), outline = "red", width = 5, fill = 'red')
+            pivot = -84 - y * 100
+            r = pivot
+        else:
+            cercle_indicateurs_D = canvas.create_oval((17 + (i * 16), 172 + pivot + (y * 100)), (27 + (i * 16), 182 + pivot + (y * 100)), outline = "red", width = 5, fill = 'red')
+            pivot = 0 - y * 100
+            f = pivot
+            #liste_cercle_indicateurs_D[y][i] = cercle_indicateurs_D'''
 
 ligne_separation = canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
