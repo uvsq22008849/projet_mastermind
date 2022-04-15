@@ -33,6 +33,9 @@ liste_DEFINITF_cellule_code_secret = [0 for i in range(cols)]
 #print(liste_cercle_code_secret)
 #print(liste_cellule)
 
+liste_indicateurs = [[0 for i in range(2)] for j in range(rows)]
+liste_cercle_indicateurs = [[0 for i in range(2)] for j in range(rows)]
+
 stop = 0
 cpt = 0
 tvar = tk.StringVar()
@@ -128,6 +131,7 @@ def cacher_code_secret():
     else:
         var = 'Effectuer le ' + str(cpt) + 'ème essai'
     tvar.set(var)
+    #print(liste_cellule)
 
 def cliqueG_iteration(event):
     x = canvas.canvasx(event.x)
@@ -159,6 +163,13 @@ def cliqueD_iteration(event):
                     liste_cellule[y][i] = 8
     couleur_cellule()
 
+def indicateurs():
+    for y in range(rows):
+        for i in range(cols):
+            if y == (cpt - 1) and liste_cellule[y][i] == liste_DEFINITF_cellule_code_secret:
+                canvas.itemconfigure(liste_cercle_indicateurs[y][i], fill = "white")
+
+
 
 ######################### Pogramme ################################
 
@@ -175,18 +186,32 @@ for y in range(10):
         cercle = canvas.create_oval((60 + (i * 100), 150 + (y * 100)), (((i + 1) * 100) + 30, ((y + 1) * 100) + 120), outline = "black", width = 5)
         liste_cercle[y][i] = cercle
 #print(liste_cercle)
-        #canvas.create_oval((0, i *  100), (500, i * 100), outline = "blue", width = 5)
 """cercle des diametre 70, commence à 60 de la gauche et finit à 60 de la droite. Les 10 finissent à 1120"""
 
 #60 150 130 220
 #160 250 230 320
 #90 à 150 donc ligne à y = 120
+#1er cerlce commence à y = 150 et finit à y = 220
+#Milieu 1er cercle à y = 185
+#Dernier cercle se finit à x = 430
 for z in range(4):
     cercle_code = canvas.create_oval((60 + (z * 100), 20, (((z + 1) * 100) + 30, 90)), outline = "black", width = 5)
     liste_cercle_code_secret[z] = cercle_code
 #print(liste_cercle_code_secret)
 
-canvas.create_line((60, 120), (430, 120), fill="black", width=2)
+#Commencer à x=17 du bord avec des cercle de d=10 et x=6 d'ecart entre eux
+#Commencer à y=172 avec meme d et meme écart
+for y in range(10):
+    for t in range(2):
+        for i in range(2):
+            cercle_indicateurs = canvas.create_oval((17 + (i * 16), 172 + (t * 16) + (y * 100)), ((i * 16) + 27, 182 + (t * 16) + (y * 100)), outline = "blue", width = 5, fill = 'blue')
+            liste_cercle_indicateurs[y][i] = cercle_indicateurs
+"""Indicateurs gauche"""
+#print(canvas.coords(liste_cercle_indicateurs[0][0]))
+#print(canvas.coords(liste_cercle[0][0]))
+
+
+ligne_separation = canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
 
 bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"))
