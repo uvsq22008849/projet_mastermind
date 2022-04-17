@@ -173,7 +173,6 @@ def cliqueD_iteration(event):
     couleur_cellule()
 
 def indicateurs_D():
-    cpt2 = 0
     for y in range(rows):
         for i in range(cols):
             #print(liste_cellule[y][i])
@@ -197,21 +196,51 @@ def indicateurs_D():
                     liste_indicateurs_D_bas[y][0] += 1
                 else:# liste_indicateurs_D_haut[y][0] != 0 and liste_indicateurs_D_haut[y][1] != 0 and liste_indicateurs_D_bas[y][0] != 0 and liste_indicateurs_D_bas[y][1] == 0:
                     canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
-                    liste_indicateurs_D_bas[y][1] += 1
 
+'''Bonne couleur bonne place --> enlever  de indicateur gauche'''
 def indicateurs_G():
+    cpt2 = 0
+    liste_verifiacation_couleur_differente = [0 for i in range(cols)]
+    liste_cellule_deja_compté = [4 for i in range(cols)]
+    liste_transitoire = [[0 for i in range(cols)] for j in range(rows)]
+    liste_transitoire = list(liste_cellule)
+    #print(liste_transitoire)
     for y in range(rows):
         for i in range(cols):
+            #if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+            #           liste_cellule_deja_compté[i] = i
+            #           cpt2 += 1
+            #if liste_cellule_deja_compté[i] != 4:
+            #    if liste_DEFINITF_cellule_code_secret[i] == liste_cellule_deja_compté
             for k in range(cols):
-                if y == (cpt - 2) and liste_cellule[y][i] == liste_DEFINITF_cellule_code_secret[k]:
-                    #print(liste_cellule[y][i])
-                    #print(liste_DEFINITF_cellule_code_secret[i])
-                    #print(liste_cellule[y][i])
-                    if i < 2:
-                        canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][i], fill = "red", outline = "red")
+                if y == (cpt - 2) and liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][k] and liste_DEFINITF_cellule_code_secret[i] != liste_cellule[y][i] and k != liste_cellule_deja_compté[i]:
+                    #if liste_cellule_deja_compté[i] != 4:
+                        '''if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                        i_fixe = i'''
+                        #if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                        #    liste_cellule_deja_compté[i] = liste_cellule[y][i]
+                        if liste_indicateurs_G_haut[y][0] == 0:
+                            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "red", outline = "red")
+                            liste_indicateurs_G_haut[y][0] += 1
+                            #t = liste_DEFINITF_cellule_code_secret[i]
+                            #liste_verifiacation_couleur_differente[0] = t
+                            break
+                        elif liste_indicateurs_G_haut[y][0] != 0 and liste_indicateurs_G_haut[y][1] == 0:
+                            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "red", outline = "red")
+                            liste_indicateurs_G_haut[y][1] += 1
+                            #t = liste_DEFINITF_cellule_code_secret[i]
+                            #liste_verifiacation_couleur_differente[1] = t
+                            break
+                        elif liste_indicateurs_G_haut[y][0] != 0 and liste_indicateurs_G_haut[y][1] != 0 and liste_indicateurs_G_bas[y][0] == 0:
+                            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "red", outline = "red")
+                            liste_indicateurs_G_bas[y][0] += 1
+                            #t = liste_DEFINITF_cellule_code_secret[i]
+                            #liste_verifiacation_couleur_differente[2] = t
+                            break
+                        elif liste_indicateurs_G_haut[y][0] != 0 and liste_indicateurs_G_haut[y][1] != 0 and liste_indicateurs_G_bas[y][0] != 0:
+                            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "red", outline = "red")
+                            liste_indicateurs_G_bas[y][1] += 1
                         
-                    else:
-                        canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][i - 2], fill = "red", outline = "red")
 
 
 ######################### Pogramme ################################
@@ -282,18 +311,6 @@ for y in range(10):
         cercle_indicateurs_D_bas = canvas.create_oval((447 + (i * 16), 188 + (y * 100)), (457 + (i * 16), 198 + (y * 100)), outline = "white", width = 5, fill = 'white')
         liste_cercle_indicateurs_D_bas[y][i] = cercle_indicateurs_D_bas
 
-
-'''for y in range(20):
-    for i in range(2):
-        if pivot == 0 or f < r:
-            cercle_indicateurs_D = canvas.create_oval((17 + (i * 16), 172 + pivot + (y * 100)), (27 + (i * 16), 182 + pivot + (y * 100)), outline = "red", width = 5, fill = 'red')
-            pivot = -84 - y * 100
-            r = pivot
-        else:
-            cercle_indicateurs_D = canvas.create_oval((17 + (i * 16), 172 + pivot + (y * 100)), (27 + (i * 16), 182 + pivot + (y * 100)), outline = "red", width = 5, fill = 'red')
-            pivot = 0 - y * 100
-            f = pivot
-            #liste_cercle_indicateurs_D[y][i] = cercle_indicateurs_D'''
 
 ligne_separation = canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
