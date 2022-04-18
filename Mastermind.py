@@ -18,6 +18,7 @@ import tkinter.font as tkFont
 ##################### variables globales ##########################
 
 racine = tk.Tk()
+#racine.configure(bg = 'black')
 
 HEIGHT = 540
 WIDTH = 490
@@ -42,14 +43,22 @@ liste_cercle_indicateurs_D_haut = [[0 for i in range(2)] for j in range(rows)]
 liste_indicateurs_D_bas = [[0 for i in range(2)] for j in range(rows)]
 liste_cercle_indicateurs_D_bas = [[0 for i in range(2)] for j in range(rows)]
 
+
+liste_cpt_cellule = [[0 for i in range(9)] for j in range(rows)]
+liste_cpt_code = [0 for i in range(9)]
+
+
 stop = 0
 cpt = 0
-pivot = 0
+#pivot = 0
+cpt0, cpt1, cpt2, cpt3, cpt4, cpt5, cpt6, cpt7, cpt8 = 0, 0, 0, 0, 0, 0, 0, 0, 0
+cpt0_cellule, cpt1_cellule, cpt2_cellule, cpt3_cellule, cpt4_cellule, cpt5_cellule, cpt6_cellule, cpt7_cellule, cpt8_cellule = 0, 0, 0, 0, 0, 0, 0, 0, 0
 tvar = tk.StringVar()
 tvar.set("Cache moi ce code ;)")
 
 ######################### Fonctions ###############################
 def couleur_cellule():
+    global cpt0, cpt1, cpt2, cpt3, cpt4, cpt5, cpt6, cpt7, cpt8
     for i in range(cols):
         if liste_cellule_code_secret[i] == 0:
             canvas.itemconfigure(liste_cercle_code_secret[i], fill = "white")
@@ -140,6 +149,7 @@ def cacher_code_secret():
     tvar.set(var)
     #print(liste_cellule)
     indicateurs_D()
+    nombre_couleur_ligne()
     indicateurs_G()
 
 def cliqueG_iteration(event):
@@ -196,29 +206,86 @@ def indicateurs_D():
                     liste_indicateurs_D_bas[y][0] += 1
                 else:# liste_indicateurs_D_haut[y][0] != 0 and liste_indicateurs_D_haut[y][1] != 0 and liste_indicateurs_D_bas[y][0] != 0 and liste_indicateurs_D_bas[y][1] == 0:
                     canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
+                    liste_indicateurs_D_bas[y][1] += 1
+
+def nombre_couleur_ligne():
+    #global cpt0, cpt1, cpt2, cpt3, cpt4, cpt5, cpt6, cpt7, cpt8
+    #global cpt0_cellule, cpt1_cellule, cpt2_cellule, cpt3_cellule, cpt4_cellule, cpt5_cellule, cpt6_cellule, cpt7_cellule, cpt8_cellule
+    for i in range(cols):
+        if cpt < 2:
+            if liste_DEFINITF_cellule_code_secret[i] == 0:
+                liste_cpt_code[0] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 1:
+                liste_cpt_code[1]  += 1
+                #print(cpt1)
+            elif liste_DEFINITF_cellule_code_secret[i] == 2:
+                liste_cpt_code[2]+= 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 3:
+                liste_cpt_code[3] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 4:
+                liste_cpt_code[4] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 5:
+                liste_cpt_code[5] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 6:
+                liste_cpt_code[6] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 7:
+                liste_cpt_code[7] += 1
+            elif liste_DEFINITF_cellule_code_secret[i] == 8:
+                liste_cpt_code[8] += 1
+        #print(liste_cpt_code)
+    
+    for y in range(rows):
+        for i in range(cols):
+            if y == (cpt - 2):# and cpt > 2:
+                if liste_cellule[y][i] == 0:
+                    liste_cpt_cellule[y][0] += 1
+                elif liste_cellule[y][i] == 1:
+                    liste_cpt_cellule[y][1] += 1
+                elif liste_cellule[y][i] == 2:
+                    liste_cpt_cellule[y][2] += 1
+                elif liste_cellule[y][i] == 3:
+                    liste_cpt_cellule[y][3] += 1
+                elif liste_cellule[y][i] == 4:
+                    liste_cpt_cellule[y][4] += 1
+                elif liste_cellule[y][i] == 5:
+                    liste_cpt_cellule[y][5] += 1
+                elif liste_cellule[y][i] == 6:
+                    liste_cpt_cellule[y][6] += 1
+                elif liste_cellule[y][i] == 7:
+                    liste_cpt_cellule[y][7] += 1
+                elif liste_cellule[y][i] == 8:
+                    liste_cpt_cellule[y][8] += 1
+    #print(liste_cpt_cellule)
 
 '''Bonne couleur bonne place --> enlever  de indicateur gauche'''
-def indicateurs_G():
+"""def indicateurs_G():
     cpt2 = 0
     liste_verifiacation_couleur_differente = [0 for i in range(cols)]
-    liste_cellule_deja_compté = [4 for i in range(cols)]
+    liste_cellule_deja_compté = [[0 for i in range(cols)] for j in range(rows)]
     liste_transitoire = [[0 for i in range(cols)] for j in range(rows)]
     liste_transitoire = list(liste_cellule)
     #print(liste_transitoire)
     for y in range(rows):
         for i in range(cols):
-            #if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
-            #           liste_cellule_deja_compté[i] = i
+            if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                       liste_cellule_deja_compté[y][i] += 1
+                       #print(liste_cellule_deja_compté)
+                       #print(liste_cellule_deja_compté)
             #           cpt2 += 1
             #if liste_cellule_deja_compté[i] != 4:
             #    if liste_DEFINITF_cellule_code_secret[i] == liste_cellule_deja_compté
             for k in range(cols):
-                if y == (cpt - 2) and liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][k] and liste_DEFINITF_cellule_code_secret[i] != liste_cellule[y][i] and k != liste_cellule_deja_compté[i]:
+                #if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                #    liste_transitoire[y][i] = 9
+                if y == (cpt - 2) and liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][k] and liste_cellule_deja_compté[y][k] < 1:# and liste_DEFINITF_cellule_code_secret[i] != liste_cellule[y][i]:# and k != liste_cellule_deja_compté[i]:
                     #if liste_cellule_deja_compté[i] != 4:
                         '''if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
                         i_fixe = i'''
                         #if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
                         #    liste_cellule_deja_compté[i] = liste_cellule[y][i]
+                        liste_cellule_deja_compté[y][k] += 1
+                        if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                            break
                         if liste_indicateurs_G_haut[y][0] == 0:
                             canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "red", outline = "red")
                             liste_indicateurs_G_haut[y][0] += 1
@@ -239,7 +306,65 @@ def indicateurs_G():
                             break
                         elif liste_indicateurs_G_haut[y][0] != 0 and liste_indicateurs_G_haut[y][1] != 0 and liste_indicateurs_G_bas[y][0] != 0:
                             canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "red", outline = "red")
-                            liste_indicateurs_G_bas[y][1] += 1
+                            liste_indicateurs_G_bas[y][1] += 1"""
+              
+def indicateurs_G():
+    liste_position_indice = [4 for i in range(cols)]
+    liste_nbre_indicateur_G = [0 for i in range(rows)]
+    for y in range(rows):
+        if liste_indicateurs_D_haut[y][0] == 1:
+            liste_nbre_indicateur_G[y] -= 1
+        if liste_indicateurs_D_haut[y][1] == 1:
+            liste_nbre_indicateur_G[y] -= 1
+        if liste_indicateurs_D_bas[y][0] == 1:
+            liste_nbre_indicateur_G[y] -= 1
+        if liste_indicateurs_D_bas[y][1] == 1:
+            liste_nbre_indicateur_G[y] -= 1
+        for i in range(8):
+            #if y == (cpt - 2):
+            if liste_cpt_cellule[y][i + 1] <= liste_cpt_code[i + 1]:
+                liste_nbre_indicateur_G[y] += liste_cpt_cellule[y][i + 1]
+            if liste_cpt_cellule[y][i + 1] > liste_cpt_code[i + 1]:
+                liste_nbre_indicateur_G[y] += liste_cpt_code[i + 1]
+            '''if i < cols:
+                if liste_DEFINITF_cellule_code_secret[i] == liste_cellule[y][i]:
+                    liste_nbre_indicateur_G[y] -= 1'''
+            """if liste_indicateurs_D_haut[y][0] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_haut[y][1] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_bas[y][0] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_bas[y][1] == 1:
+                liste_nbre_indicateur_G[y] -= 1"""
+            if liste_nbre_indicateur_G[y] == 1:
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+            if liste_nbre_indicateur_G[y] == 2:
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+            if liste_nbre_indicateur_G[y] == 3:
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+            if liste_nbre_indicateur_G[y] == 4:
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black") 
+    #print(liste_nbre_indicateur_G)
+    #nbre_indicateur_G = 0
+        #print(nbre_indicateur_G)
+    '''for i in range(cols):
+        for k in range(cols):
+            if liste_DEFINITF_cellule_code_secret[0] == liste_cellule[y][k]:
+                liste_position_indice[0] = k
+                break
+            if liste_DEFINITF_cellule_code_secret[1] == liste_cellule[y][k] and liste_position_indice[0] == 4:# and k != liste_position_indice[0]:
+                liste_position_indice[1] = k
+                break
+            if liste_DEFINITF_cellule_code_secret[1] == liste_cellule[y][k] and liste_position_indice[0] != 4 and k != liste_position_indice[0]:
+                liste_position_indice[1] = k
+                break '''
                         
 
 
