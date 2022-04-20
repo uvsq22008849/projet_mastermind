@@ -150,6 +150,7 @@ def cacher_code_secret():
     indicateurs_D()
     nombre_couleur_ligne()
     indicateurs_G()
+    couleur_indicateurs()
 
 def cliqueG_iteration(event):
     x = canvas.canvasx(event.x)
@@ -195,16 +196,16 @@ def indicateurs_D():
                 else:
                     canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][i - 2], fill = "red", outline = "red")'''
                 if liste_indicateurs_D_haut[y][0] == 0:
-                    canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "red", outline = "red")
+                    #canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "red", outline = "red")
                     liste_indicateurs_D_haut[y][0] += 1
                 elif liste_indicateurs_D_haut[y][0] != 0 and liste_indicateurs_D_haut[y][1] == 0:
-                    canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "red", outline = "red")
+                    #canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "red", outline = "red")
                     liste_indicateurs_D_haut[y][1] += 1
                 elif liste_indicateurs_D_haut[y][0] != 0 and liste_indicateurs_D_haut[y][1] != 0 and liste_indicateurs_D_bas[y][0] == 0:
-                    canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "red", outline = "red")
+                    #canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "red", outline = "red")
                     liste_indicateurs_D_bas[y][0] += 1
                 else:# liste_indicateurs_D_haut[y][0] != 0 and liste_indicateurs_D_haut[y][1] != 0 and liste_indicateurs_D_bas[y][0] != 0 and liste_indicateurs_D_bas[y][1] == 0:
-                    canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
+                    #canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
                     liste_indicateurs_D_bas[y][1] += 1
 
 def nombre_couleur_ligne():
@@ -275,31 +276,69 @@ def indicateurs_G():
             if liste_cpt_cellule[y][i + 1] > liste_cpt_code[i + 1]:
                 liste_nbre_indicateur_G[y] += liste_cpt_code[i + 1]
             if liste_nbre_indicateur_G[y] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
                 liste_indicateurs_G_haut[y][0] = 1
             if liste_nbre_indicateur_G[y] == 2:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
                 liste_indicateurs_G_haut[y][0] = 1
                 liste_indicateurs_G_haut[y][1] = 1
             if liste_nbre_indicateur_G[y] == 3:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
                 liste_indicateurs_G_haut[y][0] = 1
                 liste_indicateurs_G_haut[y][1] = 1
                 liste_indicateurs_G_bas[y][0] = 1
             if liste_nbre_indicateur_G[y] == 4:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black") 
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black") 
                 liste_indicateurs_G_haut[y][0] = 1
                 liste_indicateurs_G_haut[y][1] = 1
                 liste_indicateurs_G_bas[y][0] = 1
                 liste_indicateurs_G_bas[y][1] = 1
     #print(liste_nbre_indicateur_G)
     #nbre_indicateur_G = 0
+
+def couleur_indicateurs():
+    for y in range(rows):
+        if liste_indicateurs_G_haut[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+        if liste_indicateurs_G_haut[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+        if liste_indicateurs_G_bas[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+        if liste_indicateurs_G_bas[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black")
+        if liste_indicateurs_D_haut[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "red", outline = "red")
+        if liste_indicateurs_D_haut[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "red", outline = "red")
+        if liste_indicateurs_D_bas[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "red", outline = "red")
+        if liste_indicateurs_D_bas[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
+    
+    for y in range(rows):
+        if liste_indicateurs_G_haut[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_G_haut[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_G_bas[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_G_bas[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_D_haut[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_D_haut[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_D_bas[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_D_bas[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "white", outline = "white")
+
 
 def recommendation():
     couleur_aleatoire = random.randint(1, 8)
@@ -316,7 +355,33 @@ def recommendation():
                     liste_cellule[y] = list(liste_transitoire)
     couleur_cellule()
 
-#def retour_en_arriere():
+def retour_en_arriere():
+    global cpt
+    for y in range(rows):
+        for i in range(cols):
+            if y == (cpt - 1):
+                liste_cellule[y][i] = 0
+                liste_cellule[y - 1][i] = 0
+                couleur_cellule()
+                if liste_indicateurs_G_haut[y - 1][0] == 1:
+                    liste_indicateurs_G_haut[y - 1][0] = 0
+                if liste_indicateurs_G_haut[y - 1][1] == 1:
+                    liste_indicateurs_G_haut[y - 1][1] = 0
+                if liste_indicateurs_G_bas[y - 1][0] == 1:
+                    liste_indicateurs_G_bas[y - 1][0] = 0
+                if liste_indicateurs_G_bas[y - 1][1] == 1:
+                    liste_indicateurs_G_bas[y - 1][1] = 0
+                if liste_indicateurs_D_haut[y - 1][0] == 1:
+                    liste_indicateurs_D_haut[y - 1][0] = 0
+                if liste_indicateurs_D_haut[y - 1][1] == 1:
+                    liste_indicateurs_D_haut[y - 1][1] = 0
+                if liste_indicateurs_D_bas[y - 1][0] == 1:
+                    liste_indicateurs_D_bas[y - 1][0] = 0
+                if liste_indicateurs_D_bas[y - 1][1] == 1:
+                    liste_indicateurs_D_bas[y - 1][1] = 0
+                couleur_indicateurs()
+                if i == 3:
+                    cpt -= 1
 
 
 ######################### Pogramme ################################
@@ -377,7 +442,7 @@ bouton_iteration.grid(row = 1, column = 0)
 bouton_recommendation = tk.Button(racine, text = "Besoin d'aide ?", command = recommendation, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"))
 bouton_recommendation.grid(row = 2, column = 0)
 
-bouton_retour_en_arriere = tk.Button(racine, text = "Retour en arrière", padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
+bouton_retour_en_arriere = tk.Button(racine, text = "Retour en arrière", command = retour_en_arriere, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
 bouton_retour_en_arriere.grid(row = 1, column = 1)
 
 
