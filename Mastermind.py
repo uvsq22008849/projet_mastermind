@@ -46,6 +46,7 @@ liste_cercle_indicateurs_D_bas = [[0 for i in range(2)] for j in range(rows)]
 
 liste_cpt_cellule = [[0 for i in range(9)] for j in range(rows)]
 liste_cpt_code = [0 for i in range(9)]
+
 liste_nbre_indicateur_G = [0 for i in range(rows)]
 
 #liste_recommendation = [[0 for i in range(cols)] for j in range(rows)]
@@ -67,15 +68,35 @@ def nombre_joueur():
     if bool == True:
         #var2 = "Passer au mode 2 joueurs"
         tvar2.set("Passer au mode 2 joueurs")
-        for i in range(cols):
-            liste_DEFINITF_cellule_code_secret[i] = random.randint(1,8)
-            nombre_couleur_ligne()
-            liste_cellule_code_secret[i] = 0
-        couleur_cellule()
+        tvar.set("Effectuer le 1er essai")
         stop = 1
         cpt = 1
-        tvar.set("Effectuer le 1er essai")
-    bool = False
+        for i in range(cols):
+            liste_DEFINITF_cellule_code_secret[i] = random.randint(1,8)
+        #print(liste_DEFINITF_cellule_code_secret)
+        nombre_couleur_ligne()
+        #print(liste_cpt_code)
+        for i in range(cols):
+            liste_cellule_code_secret[i] = 0
+        couleur_cellule()
+        bool = False
+    elif bool == False:
+        tvar2.set("Passer au mode 1 joueur")
+        tvar.set("Cache moi ce code ;)")
+        stop = 0
+        cpt = 0
+        for i in range(cols):
+            liste_DEFINITF_cellule_code_secret[i] = 0
+            liste_cellule[0][i] = 0
+        couleur_cellule()
+        #print(liste_DEFINITF_cellule_code_secret)
+        for i in range(9):
+            liste_cpt_code[i] = 0
+        #print(liste_cpt_code)
+        #print(liste_cellule_code_secret)
+        
+        bool = True
+
 
 def couleur_cellule():
     for i in range(cols):
@@ -154,6 +175,8 @@ def cacher_code_secret():
             liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
             for i in range(cols):
                 liste_cellule_code_secret[i] = 0
+                x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
+                canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", width = 50)
             stop = 1
             couleur_cellule()
             cpt += 1
@@ -189,7 +212,7 @@ def cacher_code_secret():
             nombre_couleur_ligne()
             indicateurs_G()
             couleur_indicateurs()
-            print(cpt)
+            #print(cpt)
 
 def cliqueG_iteration(event):
     x = canvas.canvasx(event.x)
@@ -438,7 +461,7 @@ def retour_en_arriere():
                 couleur_indicateurs()
                 if i == 3 and cpt > 1:
                     cpt -= 1
-                    print(cpt)
+                    #print(cpt)
                     if cpt <= 1:
                         var = 'Effectuer le ' + str(cpt) + 'er essai'
                     elif cpt == 10:
