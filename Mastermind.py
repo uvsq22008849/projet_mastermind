@@ -49,6 +49,7 @@ liste_cpt_code = [0 for i in range(9)]
 
 liste_nbre_indicateur_G = [0 for i in range(rows)]
 
+liste_point_interrogation_code = [0 for i in range(cols)]
 #liste_recommendation = [[0 for i in range(cols)] for j in range(rows)]
 
 
@@ -61,11 +62,12 @@ tvar.set("Cache moi ce code ;)")
 tvar2 = tk.StringVar()
 tvar2.set("Passer au mode 1 joueur")
 bool = True
+relancer_partie = False
 
 ######################### Fonctions ###############################
 def nombre_joueur():
     global stop, cpt, bool
-    if bool == True:
+    if bool == True and cpt == 0:
         #var2 = "Passer au mode 2 joueurs"
         tvar2.set("Passer au mode 2 joueurs")
         tvar.set("Effectuer le 1er essai")
@@ -78,9 +80,13 @@ def nombre_joueur():
         #print(liste_cpt_code)
         for i in range(cols):
             liste_cellule_code_secret[i] = 0
+            x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
+            liste_point_interrogation_code[i] = canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
         couleur_cellule()
+        #x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
+        #canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
         bool = False
-    elif bool == False:
+    elif bool == False and cpt == 1:
         tvar2.set("Passer au mode 1 joueur")
         tvar.set("Cache moi ce code ;)")
         stop = 0
@@ -88,13 +94,12 @@ def nombre_joueur():
         for i in range(cols):
             liste_DEFINITF_cellule_code_secret[i] = 0
             liste_cellule[0][i] = 0
+            canvas.itemconfigure(liste_point_interrogation_code[i], state = 'hidden')
         couleur_cellule()
-        #print(liste_DEFINITF_cellule_code_secret)
         for i in range(9):
             liste_cpt_code[i] = 0
         #print(liste_cpt_code)
         #print(liste_cellule_code_secret)
-        
         bool = True
 
 
@@ -169,14 +174,14 @@ def cliqueD_code_secret(event):
 
 
 def cacher_code_secret():
-    global liste_DEFINITF_cellule_code_secret, stop, cpt
+    global liste_DEFINITF_cellule_code_secret, stop, cpt, relancer_partie
     for y in range(rows):
         if cpt == 0 and stop < 1 and liste_cellule_code_secret[0] != 0 and liste_cellule_code_secret[1] != 0 and liste_cellule_code_secret[2] != 0 and liste_cellule_code_secret[3] != 0:
             liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
             for i in range(cols):
                 liste_cellule_code_secret[i] = 0
                 x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
-                canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", width = 50)
+                liste_point_interrogation_code[i] = canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
             stop = 1
             couleur_cellule()
             cpt += 1
@@ -197,12 +202,13 @@ def cacher_code_secret():
     #print(liste_DEFINITF_cellule_code_secret)
         if cpt > 0 and y == (cpt - 1) and liste_cellule[y][0] != 0 and liste_cellule[y][1] != 0 and liste_cellule[y][2] != 0 and liste_cellule[y][3] != 0:
             couleur_cellule()
-            cpt += 1
+            if cpt < 11:
+                cpt += 1
             if cpt <= 1:
                 var = 'Effectuer le ' + str(cpt) + 'er essai'
             elif cpt == 10:
                 var = 'Attention dernier essai !'
-            elif cpt > 10:
+            elif cpt == 11:
                 var = 'Encore une partie ? :)'
             else:
                 var = 'Effectuer le ' + str(cpt) + 'ème essai'
@@ -212,7 +218,14 @@ def cacher_code_secret():
             nombre_couleur_ligne()
             indicateurs_G()
             couleur_indicateurs()
-            #print(cpt)
+            victoire_defaite()
+            #nouvelle_partie()
+    if cpt >= 11:
+        cpt += 1
+        #print(cpt)
+    if cpt == 13:
+        relancer_partie = True
+        nouvelle_partie()
 
 def cliqueG_iteration(event):
     x = canvas.canvasx(event.x)
@@ -368,40 +381,40 @@ def couleur_indicateurs():
     for y in range(rows):
         if (cpt - 2) == y:
             if liste_indicateurs_G_haut[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "#CD2626", outline = "#CD2626")
             if liste_indicateurs_G_haut[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "#CD2626", outline = "#CD2626")
             if liste_indicateurs_G_bas[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "#CD2626", outline = "#CD2626")
             if liste_indicateurs_G_bas[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black")
+                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "#CD2626", outline = "#CD2626")
             if liste_indicateurs_D_haut[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "red", outline = "red")
+                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "#008B00", outline = "#008B00")
             if liste_indicateurs_D_haut[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "red", outline = "red")
+                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "#008B00", outline = "#008B00")
             if liste_indicateurs_D_bas[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "red", outline = "red")
+                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "#008B00", outline = "#008B00")
             if liste_indicateurs_D_bas[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "red", outline = "red")
+                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "#008B00", outline = "#008B00")
     
     for y in range(rows):
-        if (cpt - 2) == y:
-            if liste_indicateurs_G_haut[y][0] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "white", outline = "white")
-            if liste_indicateurs_G_haut[y][1] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "white", outline = "white")
-            if liste_indicateurs_G_bas[y][0] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "white", outline = "white")
-            if liste_indicateurs_G_bas[y][1] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "white", outline = "white")
-            if liste_indicateurs_D_haut[y][0] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "white", outline = "white")
-            if liste_indicateurs_D_haut[y][1] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "white", outline = "white")
-            if liste_indicateurs_D_bas[y][0] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "white", outline = "white")
-            if liste_indicateurs_D_bas[y][1] == 0:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "white", outline = "white")
+        #if (cpt - 2) == y:
+        if liste_indicateurs_G_haut[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_G_haut[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_G_bas[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_G_bas[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_D_haut[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_D_haut[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "white", outline = "white")
+        if liste_indicateurs_D_bas[y][0] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "white", outline = "white")
+        if liste_indicateurs_D_bas[y][1] == 0:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "white", outline = "white")
 
 
 def recommendation():
@@ -411,7 +424,7 @@ def recommendation():
             if y == (cpt - 1):
                 if y == 0:
                     liste_cellule[y][i] = couleur_aleatoire
-                elif y == 1 and liste_indicateurs_D_haut[y - 1][0] != 1 and liste_indicateurs_G_haut[y - 1][0] != 1:
+                elif y == cpt - 1:# and liste_indicateurs_D_haut[y - 1][0] != 1 and liste_indicateurs_G_haut[y - 1][0] != 1:
                     liste_cellule[y][i] = couleur_aleatoire
                 elif liste_indicateurs_G_haut[y - 1][0] == 1:
                     liste_transitoire = list(liste_cellule[y - 1])
@@ -472,28 +485,140 @@ def retour_en_arriere():
                         var = 'Effectuer le ' + str(cpt) + 'ème essai'
                     tvar.set(var)
 
+    if cpt == 11:
+        for i in range(9):
+            liste_cpt_cellule[9][i] = 0
+        for i in range(cols):
+            liste_cellule[9][i] = 0
+            couleur_cellule()
+            if liste_indicateurs_G_haut[9][0] == 1:
+                liste_indicateurs_G_haut[9][0] = 0
+                #liste_indicateurs_G_haut[y][0] = 0
+                liste_nbre_indicateur_G[9] = 0
+            if liste_indicateurs_G_haut[9][1] == 1:
+                liste_indicateurs_G_haut[9][1] = 0
+                #liste_indicateurs_G_haut[y][1] = 0
+                liste_nbre_indicateur_G[9] = 0
+            if liste_indicateurs_G_bas[9][0] == 1:
+                liste_indicateurs_G_bas[9][0] = 0
+                #liste_indicateurs_G_bas[y][0] = 0
+                liste_nbre_indicateur_G[9] = 0
+            if liste_indicateurs_G_bas[9][1] == 1:
+                liste_indicateurs_G_bas[9][1] = 0
+                #liste_indicateurs_G_bas[y][1] = 0
+                liste_nbre_indicateur_G[9] = 0
+            if liste_indicateurs_D_haut[9][0] == 1:
+                liste_indicateurs_D_haut[9][0] = 0
+                #liste_indicateurs_D_haut[y][0] = 0
+            if liste_indicateurs_D_haut[9][1] == 1:
+                liste_indicateurs_D_haut[9][1] = 0
+                #liste_indicateurs_D_haut[y][1] = 0
+            if liste_indicateurs_D_bas[9][0] == 1:
+                liste_indicateurs_D_bas[9][0] = 0
+                #liste_indicateurs_D_bas[y][0] = 0
+            if liste_indicateurs_D_bas[9][1] == 1:
+                liste_indicateurs_D_bas[9][1] = 0
+                #liste_indicateurs_D_bas[y][1] = 0
+            couleur_indicateurs()
+            if i == 3 and cpt > 1:
+                cpt -= 1
+                var = 'Attention dernier essai !'
+                tvar.set(var)
+
+
 def sauvegarde():
     fic = open("Sauvegarde Mastermind", "w")
-    fic.write(str(liste_DEFINITF_cellule_code_secret) + "\n")
+    for i in range(cols):
+        if i < 3:
+            fic.write(str(liste_DEFINITF_cellule_code_secret[i]))
+        else:
+            fic.write(str(liste_DEFINITF_cellule_code_secret[i]) + "\n")
+    for i in range(cols):
+        if i < 3:
+            fic.write(str(liste_cercle_code_secret))
+        else:
+            fic.write(str(liste_cercle_code_secret) + "\n")
     #for y in range(rows):
     fic.write(str(liste_cellule) + "\n")
+    fic.write(str(liste_cercle) + "\n")
     #for y in range(rows):
     #    for i in range(2):
     fic.write(str(liste_indicateurs_D_haut) + "\n")
+    fic.write(str(liste_cercle_indicateurs_D_haut) + "\n")
     fic.write(str(liste_indicateurs_D_bas) + "\n")
+    fic.write(str(liste_cercle_indicateurs_D_bas) + "\n")
     fic.write(str(liste_indicateurs_G_haut) + "\n")
+    fic.write(str(liste_cercle_indicateurs_G_haut) + "\n")
     fic.write(str(liste_indicateurs_G_bas) + "\n")
+    fic.write(str(liste_cercle_indicateurs_G_bas) + "\n")
+    fic.write(str(stop) + "\n")
+    fic.write(str(cpt))
     fic.close()
 
+'''def charger_partie():
+    fic = open("Sauvegarde Mastermind","r")
+    for i in range(cols):
+    for ligne in fic:
+        print(ligne)
+    fic.close()   
+
+    for i in range(cols):'''
+
+def victoire_defaite():
+    global ecran_defaite, ecran_victoire, cpt
+    for y in range(rows):
+        if liste_indicateurs_D_bas[y][1] == 1 and y < 4:
+            ecran_victoire = canvas.create_window(WIDTH/2, HEIGHT/2, window = label_victoire)
+            cpt = 11
+            tvar.set("Encore une partie ? :)")
+        elif liste_indicateurs_D_bas[y][1] == 1:
+            x0, y0, x1, y1 = canvas.coords(liste_cercle[y][0])
+            #print(y0, y1)
+            ecran_victoire = canvas.create_window(WIDTH/2, (y0 + y1)/2, window = label_victoire)
+        elif cpt == 11:
+            ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
+
+def nouvelle_partie():
+    global cpt, stop, relancer_partie, bool
+    if relancer_partie == True:
+        cpt = 0
+        stop = 0
+        for i in range(cols):
+            liste_DEFINITF_cellule_code_secret[i] = 0
+            #liste_point_interrogation_code[i] = 0
+            canvas.itemconfigure(liste_point_interrogation_code[i], state = 'hidden')
+        for y in range(rows):
+            liste_nbre_indicateur_G[y] = 0
+            for i in range(cols):
+                liste_cellule[y][i] = 0
+            for i in range(2):
+                liste_indicateurs_D_haut[y][i] = 0
+                liste_indicateurs_D_bas[y][i] = 0
+                liste_indicateurs_G_haut[y][i] = 0
+                liste_indicateurs_G_bas[y][i] = 0
+            for i in range(9):
+                liste_cpt_cellule[y][i] = 0
+        for i in range(9):
+            liste_cpt_code[i] = 0
+        couleur_cellule()
+        couleur_indicateurs()
+        tvar.set("Cache moi ce code ;)")
+        tvar2.set("Passer au mode 1 joueur")
+        bool = True
+        relancer_partie = False
+        canvas.itemconfigure(ecran_defaite, state = 'hidden')
+        canvas.itemconfigure(ecran_victoire, state = 'hidden')
 
 ######################### Pogramme ################################
-
 scroll_y = tk.Scrollbar(racine, orient = 'vertical')
 scroll_y.grid(row = 0, rowspan = 5, column = 2, sticky = 'ns')
 
-canvas = tk.Canvas(racine, bg = "white", height=HEIGHT, width=WIDTH, scrollregion = (0, 0, 490, 1140), yscrollcommand = scroll_y.set)
+canvas = tk.Canvas(racine, bg = "white", height=HEIGHT, width=WIDTH, scrollregion = (0, 0, 490, 1140), yscrollcommand = scroll_y.set, bd = 0, highlightthickness = 0)
 canvas.grid(row = 0, rowspan = 5, column = 1)
 scroll_y.config(command = canvas.yview)
+
+label_victoire = tk.Label(racine, text = "Félicitations !" + "\n\n" + "Vous avez remporté la partie :)", font =("Optima", "30"), bg = 'yellow', borderwidth = 10)
+label_defaite = tk.Label(racine, text = "Quel dommage, c'était pas loin !" + "\n\n" + "Pourquoi pas retenter ta chance ?", font =("Optima", "30"), bg = '#98FB98', borderwidth = 10)
 
 #print(tkFont.families())
 
@@ -539,10 +664,10 @@ for y in range(10):
 ligne_separation = canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
 
-bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 14)
+bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Trebuchet MS", "23"), width = 14)
 bouton_iteration.grid(row = 6, column = 1)
 
-bouton_recommendation = tk.Button(racine, text = "Besoin d'aide ?", command = recommendation, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"))
+bouton_recommendation = tk.Button(racine, text = "Besoin d'aide ?", command = recommendation, padx =16, pady =18, bd ='5', bg ='blue', font =("Comic Sans MS", "23"))
 bouton_recommendation.grid(row = 1, column = 0)
 
 bouton_retour_en_arriere = tk.Button(racine, text = "Retour en arrière", command = retour_en_arriere, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
@@ -561,5 +686,5 @@ canvas.bind("<Button-1>", cliqueG_code_secret)
 canvas.bind("<Button-1>", cliqueG_iteration, add='+')
 canvas.bind("<Button-2>", cliqueD_code_secret)
 canvas.bind("<Button-2>", cliqueD_iteration, add='+')
-
+#victoire()
 racine.mainloop()
