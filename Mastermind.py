@@ -13,12 +13,13 @@
 import tkinter as tk
 import random
 import tkinter.font as tkFont
+
 #from tkinter import ttk
 
 ##################### variables globales ##########################
 
 racine = tk.Tk()
-#racine.configure(bg = 'black')
+racine.configure(bg = '#53868B')
 
 HEIGHT = 540
 WIDTH = 490
@@ -575,7 +576,7 @@ def victoire_defaite():
             x0, y0, x1, y1 = canvas.coords(liste_cercle[y][0])
             #print(y0, y1)
             ecran_victoire = canvas.create_window(WIDTH/2, (y0 + y1)/2, window = label_victoire)
-        elif cpt == 11:
+        elif cpt == 11 and liste_cellule[9][0] != 0:
             ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
 
 def nouvelle_partie():
@@ -664,22 +665,22 @@ for y in range(10):
 ligne_separation = canvas.create_line((60, 120), (430, 120), fill="black", width=2)
 
 
-bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='5', bg ='blue', font =("Trebuchet MS", "23"), width = 14)
+bouton_iteration = tk.Button(racine, textvariable = tvar, command = cacher_code_secret, padx =16, pady =18, bd ='3', font =("Trebuchet MS", "23"), width = 14)
 bouton_iteration.grid(row = 6, column = 1)
 
-bouton_recommendation = tk.Button(racine, text = "Besoin d'aide ?", command = recommendation, padx =16, pady =18, bd ='5', bg ='blue', font =("Comic Sans MS", "23"))
+bouton_recommendation = tk.Button(racine, text = "Besoin d'aide ?", command = recommendation, padx =16, pady =18, bd ='3', bg ='blue', font =("Comic Sans MS", "23"))
 bouton_recommendation.grid(row = 1, column = 0)
 
-bouton_retour_en_arriere = tk.Button(racine, text = "Retour en arrière", command = retour_en_arriere, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
+bouton_retour_en_arriere = tk.Button(racine, text = "Retour en arrière", command = retour_en_arriere, padx =16, pady =18, bd ='3', bg ='blue', font =("Optima", "23"), width = 10)
 bouton_retour_en_arriere.grid(row = 2, column = 0)
 
-bouton_sauvegarde = tk.Button(racine, text = "Sauvegarder", command = sauvegarde, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
+bouton_sauvegarde = tk.Button(racine, text = "Sauvegarder", command = sauvegarde, padx =16, pady =18, bd ='3', bg ='blue', font =("Optima", "23"), width = 10)
 bouton_sauvegarde.grid(row = 3, column = 0)
 
-bouton_charger = tk.Button(racine, text = "Charger la partie", command = retour_en_arriere, padx =16, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 10)
+bouton_charger = tk.Button(racine, text = "Charger la partie", command = retour_en_arriere, padx =16, pady =18, bg ='blue', font =("Optima", "23"), width = 10, bd = '3')
 bouton_charger.grid(row = 4, column = 0)
 
-bouton_nbre_joueur = tk.Button(racine, textvariable = tvar2, command = nombre_joueur, padx =30, pady =18, bd ='5', bg ='blue', font =("Optima", "23"), width = 14)
+bouton_nbre_joueur = tk.Button(racine, textvariable = tvar2, command = nombre_joueur, padx =30, pady =18, bd ='3', bg ='yellow', font =("Optima", "23"), width = 14)
 bouton_nbre_joueur.grid(row = 0, column = 0)
 
 canvas.bind("<Button-1>", cliqueG_code_secret)
