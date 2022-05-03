@@ -67,12 +67,13 @@ var2 = "Mode 1 joueur"
 tvar2.set(var2)
 booleen = True
 relancer_partie = False
+pas_victoire = False
 
 ######################### Fonctions ###############################
 def nombre_joueur():
     global stop, cpt, booleen, var, var2
     if booleen == True and cpt == 0:
-        var2 = "Passer au mode 2 joueurs"
+        var2 = "Mode 2 joueurs"
         tvar2.set(var2)
         var = "Effectuer le 1er essai"
         tvar.set(var)
@@ -211,6 +212,7 @@ def cacher_code_secret():
             couleur_cellule()
             if cpt < 11:
                 cpt += 1
+                #print(cpt)
             if cpt <= 1:
                 var = 'Effectuer le ' + str(cpt) + 'er essai'
             elif cpt == 10:
@@ -220,13 +222,21 @@ def cacher_code_secret():
             else:
                 var = 'Effectuer le ' + str(cpt) + 'ème essai'
             tvar.set(var)
-            #print(liste_cellule)
             indicateurs_D()
             nombre_couleur_ligne()
             indicateurs_G()
             couleur_indicateurs()
             victoire_defaite()
             #nouvelle_partie()
+            #print(liste_cpt_code)
+            #print(liste_DEFINITF_cellule_code_secret)
+            #print(liste_indicateurs_D_haut)
+    """"Code pour que lorsque la partie est chargé les points d'interogations s'affiche"""
+    if liste_point_interrogation_code[0] != 0:
+        for i in range(4):
+            x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
+            liste_point_interrogation_code[i] = canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
+    """boucle itère 10 fois seulement, grace à ce code je peux incrémenter la variable 'cpt' encore une fois pour ensuite appeler la fonction nouvelle_partie() sans qu'elle soit appellée dès que la partie se finit"""
     if cpt >= 11:
         cpt += 1
         #print(cpt)
@@ -343,66 +353,57 @@ def indicateurs_G():
     #liste_position_indice = [4 for i in range(cols)]
     #liste_nbre_indicateur_G = [0 for i in range(rows)]
     for y in range(rows):
-        if liste_indicateurs_D_haut[y][0] == 1:
-            liste_nbre_indicateur_G[y] -= 1
-        if liste_indicateurs_D_haut[y][1] == 1:
-            liste_nbre_indicateur_G[y] -= 1
-        if liste_indicateurs_D_bas[y][0] == 1:
-            liste_nbre_indicateur_G[y] -= 1
-        if liste_indicateurs_D_bas[y][1] == 1:
-            liste_nbre_indicateur_G[y] -= 1
-        for i in range(8):
-            #if y == (cpt - 2):
-            if liste_cpt_cellule[y][i + 1] <= liste_cpt_code[i + 1]:
-                liste_nbre_indicateur_G[y] += liste_cpt_cellule[y][i + 1]
-            if liste_cpt_cellule[y][i + 1] > liste_cpt_code[i + 1]:
-                liste_nbre_indicateur_G[y] += liste_cpt_code[i + 1]
-            if liste_nbre_indicateur_G[y] == 1:
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                liste_indicateurs_G_haut[y][0] = 1
-            if liste_nbre_indicateur_G[y] == 2:
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
-                liste_indicateurs_G_haut[y][0] = 1
-                liste_indicateurs_G_haut[y][1] = 1
-            if liste_nbre_indicateur_G[y] == 3:
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
-                liste_indicateurs_G_haut[y][0] = 1
-                liste_indicateurs_G_haut[y][1] = 1
-                liste_indicateurs_G_bas[y][0] = 1
-            if liste_nbre_indicateur_G[y] == 4:
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "black", outline = "black")
-                #canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "black", outline = "black") 
-                liste_indicateurs_G_haut[y][0] = 1
-                liste_indicateurs_G_haut[y][1] = 1
-                liste_indicateurs_G_bas[y][0] = 1
-                liste_indicateurs_G_bas[y][1] = 1
+        if (cpt - 2) == y:
+            if liste_indicateurs_D_haut[y][0] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_haut[y][1] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_bas[y][0] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            if liste_indicateurs_D_bas[y][1] == 1:
+                liste_nbre_indicateur_G[y] -= 1
+            for i in range(8):
+                #if y == (cpt - 2):
+                if liste_cpt_cellule[y][i + 1] <= liste_cpt_code[i + 1]:
+                    liste_nbre_indicateur_G[y] += liste_cpt_cellule[y][i + 1]
+                if liste_cpt_cellule[y][i + 1] > liste_cpt_code[i + 1]:
+                    liste_nbre_indicateur_G[y] += liste_cpt_code[i + 1]
+                if liste_nbre_indicateur_G[y] == 1:
+                    liste_indicateurs_G_haut[y][0] = 1
+                if liste_nbre_indicateur_G[y] == 2:
+                    liste_indicateurs_G_haut[y][0] = 1
+                    liste_indicateurs_G_haut[y][1] = 1
+                if liste_nbre_indicateur_G[y] == 3:
+                    liste_indicateurs_G_haut[y][0] = 1
+                    liste_indicateurs_G_haut[y][1] = 1
+                    liste_indicateurs_G_bas[y][0] = 1
+                if liste_nbre_indicateur_G[y] == 4:
+                    liste_indicateurs_G_haut[y][0] = 1
+                    liste_indicateurs_G_haut[y][1] = 1
+                    liste_indicateurs_G_bas[y][0] = 1
+                    liste_indicateurs_G_bas[y][1] = 1
     #print(liste_nbre_indicateur_G)
     #nbre_indicateur_G = 0
 
 def couleur_indicateurs():
     for y in range(rows):
-        if (cpt - 2) == y:
-            if liste_indicateurs_G_haut[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "#CD2626", outline = "#CD2626")
-            if liste_indicateurs_G_haut[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "#CD2626", outline = "#CD2626")
-            if liste_indicateurs_G_bas[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "#CD2626", outline = "#CD2626")
-            if liste_indicateurs_G_bas[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "#CD2626", outline = "#CD2626")
-            if liste_indicateurs_D_haut[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "#00CD66", outline = "#00CD66")
-            if liste_indicateurs_D_haut[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "#00CD66", outline = "#00CD66")
-            if liste_indicateurs_D_bas[y][0] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "#00CD66", outline = "#00CD66")
-            if liste_indicateurs_D_bas[y][1] == 1:
-                canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "#00CD66", outline = "#00CD66")
+        #if (cpt - 2) == y:
+        if liste_indicateurs_G_haut[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][0], fill = "#CD2626", outline = "#CD2626")
+        if liste_indicateurs_G_haut[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_haut[y][1], fill = "#CD2626", outline = "#CD2626")
+        if liste_indicateurs_G_bas[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][0], fill = "#CD2626", outline = "#CD2626")
+        if liste_indicateurs_G_bas[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_G_bas[y][1], fill = "#CD2626", outline = "#CD2626")
+        if liste_indicateurs_D_haut[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][0], fill = "#00CD66", outline = "#00CD66")
+        if liste_indicateurs_D_haut[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_haut[y][1], fill = "#00CD66", outline = "#00CD66")
+        if liste_indicateurs_D_bas[y][0] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][0], fill = "#00CD66", outline = "#00CD66")
+        if liste_indicateurs_D_bas[y][1] == 1:
+            canvas.itemconfigure(liste_cercle_indicateurs_D_bas[y][1], fill = "#00CD66", outline = "#00CD66")
     
     for y in range(rows):
         #if (cpt - 2) == y:
@@ -621,6 +622,11 @@ def sauvegarde():
                 fic.write(str(liste_nbre_indicateur_G[i]) + " ")
             else:
                 fic.write(str(liste_nbre_indicateur_G[i]) + "\n")
+    for i in range(cols):
+            if i < 3:
+                fic.write(str(liste_point_interrogation_code[i]) + " ")
+            else:
+                fic.write(str(liste_point_interrogation_code[i]) + "\n")
     #for i in range(cols):
     #        if i < 3:
     #            fic.write(str(liste_point_interrogation_code[i]) + " ")
@@ -635,44 +641,15 @@ def sauvegarde():
     fic.close()
 
 def charger_partie():
-    cpt2 = 0
+    global cpt, stop, var, var2, booleen, relancer_partie, liste_DEFINITF_cellule_code_secret, liste_cercle_code_secret, liste_cpt_code, liste_nbre_indicateur_G, liste_point_interrogation_code
     liste_transitoire = []
-    liste_test = []
     i = 0
     #liste_DEFINITF_cellule_code_secret = []
     #liste_cercle_code_secret = []
     fic = open("Sauvegarde Mastermind","r")
     for ligne in fic:
         liste_transitoire.append(ligne.split())
-        #i += 1
-        """else:
-            liste_DEFINITF_cellule_code_secret[i] = ligne.split()
-            i = 0
-            cpt2 += 1
-        if i < 3 and cpt2 == 1:
-            liste_cercle_code_secret[i] = ligne.split()
-            i += 1
-        else:
-            liste_DEFINITF_cellule_code_secret[i] = ligne.split()
-            i = 0
-            cpt2 += 1"""
-    '''for i in range(120):
-        liste_transitoire[i] = int(liste_DEFINITF_cellule_code_secret[i])
-        liste_cercle_code_secret[i] = int(liste_cercle_code_secret[i])
-    var2 = liste_transitoire[-1]
-    var = liste_transitoire[-2]
-    relancer_partie = liste_transitoire[-3]
-    booleen = liste_transitoire[-4]
-    cpt = liste_transitoire[-5]
-    stop = liste_transitoire[-6]
-    fic = open("Sauvegarde Mastermind", "r")
-    while True:
-        ligne = fic.readline()
-        if ligne == 110:
-            break
-        booleen = ligne'''
-
-    #i = 119
+    
     stop = 0
     cpt = 0
     booleen = False
@@ -680,39 +657,74 @@ def charger_partie():
     var = ''
     var2 = ''
 
-    stop = liste_transitoire[114][0]
-    cpt = liste_transitoire[115][0]
-    booleen = liste_transitoire[116][0]
+    stop = liste_transitoire[115][0]
+    stop = int(stop)
+    cpt = liste_transitoire[116][0]
+    cpt = int(cpt)
+    booleen = liste_transitoire[117][0]
     if booleen == 'True':
         booleen = True
     else:
         booleen = False
-    #booleen = bool(booleen)
-    relancer_partie = liste_transitoire[117][0]
+    relancer_partie = liste_transitoire[118][0]
     if relancer_partie == 'True':
         relancer_partie = True
     else:
         relancer_partie = False
-    #relancer_partie = bool(relancer_partie)
-    for i in range(len(liste_transitoire[118])):
-        var += (liste_transitoire[118][i]) + ' '
     for i in range(len(liste_transitoire[119])):
-        var2 += (liste_transitoire[119][i]) + ' '
+        var += (liste_transitoire[119][i]) + ' '
+    for i in range(len(liste_transitoire[120])):
+        var2 += (liste_transitoire[120][i]) + ' '
     
     for i in range(1, 7):
         liste_transitoire.remove(liste_transitoire[-1])
-        #liste_test.append(sum(map(sum, liste_transitoire[i])))
-        #liste_test.append(np.sum(liste_transitoire[i], axis = 1))
-    #print(var)
     liste_transitoire = [list(map(int,i)) for i in liste_transitoire]
-    print(liste_transitoire)
-    print(var2, var, relancer_partie, booleen, cpt, stop)
-    print(type(booleen), type(relancer_partie))
-    #print(booleen)
-    fic.close()   
+
+    liste_DEFINITF_cellule_code_secret = liste_transitoire[0]
+    liste_cercle_code_secret = liste_transitoire[1]
+    liste_cpt_code = liste_transitoire[112]
+    liste_nbre_indicateur_G = liste_transitoire[113]
+    liste_point_interrogation_code = liste_transitoire[114]
+    for y in range(rows):
+        liste_cellule[y] = liste_transitoire[y + 2]
+        liste_cercle[y] = liste_transitoire[y + 12]
+        liste_indicateurs_D_haut[y] = liste_transitoire[y + 22]
+        liste_cercle_indicateurs_D_haut[y] = liste_transitoire[y + 32]
+        liste_indicateurs_D_bas[y] = liste_transitoire[y + 42]
+        liste_cercle_indicateurs_D_bas[y] = liste_transitoire[y + 52]
+        liste_indicateurs_G_haut[y] = liste_transitoire[y + 62]
+        liste_cercle_indicateurs_G_haut[y] = liste_transitoire[y + 72]
+        liste_indicateurs_G_bas[y] = liste_transitoire[y + 82]
+        liste_cercle_indicateurs_G_bas[y] = liste_transitoire[y + 92]
+        liste_cpt_cellule[y] = liste_transitoire[y + 102]
+
+    fic.close()
+
+    #nombre_joueur()
+    #cacher_code_secret()
+    tvar.set(var)
+    tvar2.set(var2)
+    
+    couleur_cellule()
+    couleur_indicateurs()
+    cacher_code_secret()
+    nombre_joueur
+    #print(liste_transitoire)
+    #print(var2, var, booleen, relancer_partie, cpt, stop)
+    #print(type(booleen), type(relancer_partie))
+    #print(liste_DEFINITF_cellule_code_secret)
+    #print(liste_cercle_code_secret)
+    #print(liste_cellule)
+    #print(liste_cercle)
+    #print(liste_indicateurs_D_haut)
+    #print(liste_cercle_indicateurs_D_haut)
+    #print(liste_cpt_code)
+    #print(liste_nbre_indicateur_G) 
 
 def victoire_defaite():
-    global ecran_defaite, ecran_victoire, cpt, var
+    global ecran_defaite, ecran_victoire, cpt, var, pas_victoire
+    #ecran_victoire = 0
+    #ecran_defaite = 0
     for y in range(rows):
         if liste_indicateurs_D_bas[y][1] == 1 and y < 4:
             ecran_victoire = canvas.create_window(WIDTH/2, HEIGHT/2, window = label_victoire)
@@ -723,10 +735,12 @@ def victoire_defaite():
             x0, y0, x1, y1 = canvas.coords(liste_cercle[y][0])
             #print(y0, y1)
             ecran_victoire = canvas.create_window(WIDTH/2, (y0 + y1)/2, window = label_victoire)
+            print(ecran_victoire)
             cpt = 11
             var = "Encore une partie ? :)"
             tvar.set(var)
-        elif cpt == 11 and liste_cellule[9][0] != 0:
+            pas_victoire = True
+        elif cpt == 11 and liste_cellule[9][0] != 0 and pas_victoire == False:
             ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
 
 def nouvelle_partie():
@@ -759,7 +773,7 @@ def nouvelle_partie():
         couleur_indicateurs()
         var = "Cache moi ce code ;)"
         tvar.set(var)
-        var2 = "Passer au mode 1 joueur"
+        var2 = "Mode un joueur"
         tvar2.set(var2)
         booleen = True
         relancer_partie = False
@@ -840,7 +854,7 @@ bouton_charger = tk.Button(racine, text = "Charger la partie", command = charger
 bouton_charger.grid(row = 4, column = 0)
 
 bouton_nbre_joueur = tk.Button(racine, textvariable = tvar2, command = nombre_joueur, padx =27, pady =18, bd ='3', bg ='yellow', font =("Optima", "23"), width = 9)
-bouton_nbre_joueur.grid(row = 0, column = 0, padx =25)
+bouton_nbre_joueur.grid(row = 0, column = 0, padx =25) 
 
 canvas.bind("<Button-1>", cliqueG_code_secret)
 canvas.bind("<Button-1>", cliqueG_iteration, add='+') 
