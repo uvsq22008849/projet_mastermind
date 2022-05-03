@@ -67,7 +67,8 @@ var2 = "Mode 1 joueur"
 tvar2.set(var2)
 booleen = True
 relancer_partie = False
-pas_victoire = False
+stop_ecran_defaite = 1
+restaurer_point_interrogation = False
 
 ######################### Fonctions ###############################
 def nombre_joueur():
@@ -182,7 +183,7 @@ def cliqueD_code_secret(event):
 
 
 def cacher_code_secret():
-    global liste_DEFINITF_cellule_code_secret, stop, cpt, relancer_partie, var
+    global liste_DEFINITF_cellule_code_secret, stop, cpt, relancer_partie, var, restaurer_point_interrogation
     for y in range(rows):
         if cpt == 0 and stop < 1 and liste_cellule_code_secret[0] != 0 and liste_cellule_code_secret[1] != 0 and liste_cellule_code_secret[2] != 0 and liste_cellule_code_secret[3] != 0:
             liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
@@ -205,7 +206,7 @@ def cacher_code_secret():
             #print(liste_cellule)
             indicateurs_D()
             nombre_couleur_ligne()
-            indicateurs_G()
+            indicateurs_G() 
             couleur_indicateurs()
     #print(liste_DEFINITF_cellule_code_secret)
         if cpt > 0 and y == (cpt - 1) and liste_cellule[y][0] != 0 and liste_cellule[y][1] != 0 and liste_cellule[y][2] != 0 and liste_cellule[y][3] != 0:
@@ -232,10 +233,12 @@ def cacher_code_secret():
             #print(liste_DEFINITF_cellule_code_secret)
             #print(liste_indicateurs_D_haut)
     """"Code pour que lorsque la partie est chargé les points d'interogations s'affiche"""
-    if liste_point_interrogation_code[0] != 0:
-        for i in range(4):
+    if liste_point_interrogation_code[0] != 0 and restaurer_point_interrogation == True:
+        for i in range(cols):
             x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
             liste_point_interrogation_code[i] = canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
+    restaurer_point_interrogation = False
+    #print(liste_point_interrogation_code)
     """boucle itère 10 fois seulement, grace à ce code je peux incrémenter la variable 'cpt' encore une fois pour ensuite appeler la fonction nouvelle_partie() sans qu'elle soit appellée dès que la partie se finit"""
     if cpt >= 11:
         cpt += 1
@@ -641,7 +644,8 @@ def sauvegarde():
     fic.close()
 
 def charger_partie():
-    global cpt, stop, var, var2, booleen, relancer_partie, liste_DEFINITF_cellule_code_secret, liste_cercle_code_secret, liste_cpt_code, liste_nbre_indicateur_G, liste_point_interrogation_code
+    global cpt, stop, var, var2, booleen, relancer_partie, liste_DEFINITF_cellule_code_secret, liste_cercle_code_secret, liste_cpt_code, liste_nbre_indicateur_G, liste_point_interrogation_code, restaurer_point_interrogation
+
     liste_transitoire = []
     i = 0
     #liste_DEFINITF_cellule_code_secret = []
@@ -697,6 +701,8 @@ def charger_partie():
         liste_indicateurs_G_bas[y] = liste_transitoire[y + 82]
         liste_cercle_indicateurs_G_bas[y] = liste_transitoire[y + 92]
         liste_cpt_cellule[y] = liste_transitoire[y + 102]
+    
+    restaurer_point_interrogation = True
 
     fic.close()
 
@@ -722,7 +728,7 @@ def charger_partie():
     #print(liste_nbre_indicateur_G) 
 
 def victoire_defaite():
-    global ecran_defaite, ecran_victoire, cpt, var, pas_victoire
+    global ecran_defaite, ecran_victoire, cpt, var, stop_ecran_defaite
     #ecran_victoire = 0
     #ecran_defaite = 0
     for y in range(rows):
@@ -739,23 +745,22 @@ def victoire_defaite():
             cpt = 11
             var = "Encore une partie ? :)"
             tvar.set(var)
-            pas_victoire = True
-        elif cpt == 11 and liste_cellule[9][0] != 0 and pas_victoire == False:
+            stop_ecran_defaite = 1
+        if cpt == 11 and liste_cellule[9][0] != 0 and stop_ecran_defaite != 1:
             ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
 
 def nouvelle_partie():
-    global cpt, stop, relancer_partie, booleen, var, var2
+    global cpt, stop, relancer_partie, booleen, var, var2, stop_ecran_defaite
     if relancer_partie == True:
-        if cpt == 13 and liste_cellule[9][0] != 0:
+        if cpt == 13 and liste_cellule[9][0] != 0 and stop_ecran_defaite != 1:
             canvas.itemconfigure(ecran_defaite, state = 'hidden')
-        else :
+        else:
             canvas.itemconfigure(ecran_victoire, state = 'hidden')
-        cpt = 0
-        stop = 0
         for i in range(cols):
             liste_DEFINITF_cellule_code_secret[i] = 0
-            #liste_point_interrogation_code[i] = 0
             canvas.itemconfigure(liste_point_interrogation_code[i], state = 'hidden')
+            liste_point_interrogation_code[i] = 0
+            #print(liste_point_interrogation_code)
         for y in range(rows):
             liste_nbre_indicateur_G[y] = 0
             for i in range(cols):
@@ -773,15 +778,13 @@ def nouvelle_partie():
         couleur_indicateurs()
         var = "Cache moi ce code ;)"
         tvar.set(var)
-        var2 = "Mode un joueur"
+        var2 = "Mode 1 joueur"
         tvar2.set(var2)
         booleen = True
         relancer_partie = False
-        if cpt == 13 and liste_cellule[9][0] != 0:
-            canvas.itemconfigure(ecran_defaite, state = 'hidden')
-        else :
-            canvas.itemconfigure(ecran_victoire, state = 'hidden')
         cpt = 0
+        stop = 0
+        stop_ecran_defaite = 0
 
 ######################### Pogramme ################################
 scroll_y = tk.Scrollbar(racine, orient = 'vertical')
