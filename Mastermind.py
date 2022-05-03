@@ -13,6 +13,7 @@
 import tkinter as tk
 import random
 import tkinter.font as tkFont
+import numpy as np
 
 #from tkinter import ttk
 
@@ -58,20 +59,23 @@ stop = 0
 cpt = 0
 #pivot = 0
 tvar = tk.StringVar()
-tvar.set("Cache moi ce code ;)")
+var = "Cache moi ce code ;)"
+tvar.set(var)
 
 tvar2 = tk.StringVar()
-tvar2.set("Mode 1 joueur")
-bool = True
+var2 = "Mode 1 joueur"
+tvar2.set(var2)
+booleen = True
 relancer_partie = False
 
 ######################### Fonctions ###############################
 def nombre_joueur():
-    global stop, cpt, bool
-    if bool == True and cpt == 0:
-        #var2 = "Passer au mode 2 joueurs"
-        tvar2.set("Mode 2 joueurs")
-        tvar.set("Effectuer le 1er essai")
+    global stop, cpt, booleen, var, var2
+    if booleen == True and cpt == 0:
+        var2 = "Passer au mode 2 joueurs"
+        tvar2.set(var2)
+        var = "Effectuer le 1er essai"
+        tvar.set(var)
         stop = 1
         cpt = 1
         for i in range(cols):
@@ -86,10 +90,12 @@ def nombre_joueur():
         couleur_cellule()
         #x0, y0, x1, y1 = canvas.coords(liste_cercle_code_secret[i])
         #canvas.create_text((x0 + x1) / 2, (y0 + y1) / 2, text = "?", font =("copperplate", "50"))
-        bool = False
-    elif bool == False and cpt == 1:
-        tvar2.set("Mode 1 joueur")
-        tvar.set("Cache moi ce code ;)")
+        booleen = False
+    elif booleen == False and cpt == 1:
+        var2 = "Mode 1 joueur"
+        var = "Cache moi ce code ;)"
+        tvar2.set(var2)
+        tvar.set(var)
         stop = 0
         cpt = 0
         for i in range(cols):
@@ -101,7 +107,7 @@ def nombre_joueur():
             liste_cpt_code[i] = 0
         #print(liste_cpt_code)
         #print(liste_cellule_code_secret)
-        bool = True
+        booleen = True
 
 
 def couleur_cellule():
@@ -175,7 +181,7 @@ def cliqueD_code_secret(event):
 
 
 def cacher_code_secret():
-    global liste_DEFINITF_cellule_code_secret, stop, cpt, relancer_partie
+    global liste_DEFINITF_cellule_code_secret, stop, cpt, relancer_partie, var
     for y in range(rows):
         if cpt == 0 and stop < 1 and liste_cellule_code_secret[0] != 0 and liste_cellule_code_secret[1] != 0 and liste_cellule_code_secret[2] != 0 and liste_cellule_code_secret[3] != 0:
             liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
@@ -434,7 +440,7 @@ def recommendation():
     couleur_cellule()
 
 def retour_en_arriere():
-    global cpt
+    global cpt, var
     for y in range(rows):
         for i in range(9):
             if y == (cpt - 1):# and cpt > 2:
@@ -539,55 +545,192 @@ def sauvegarde():
             fic.write(str(liste_cercle_code_secret[i]) + ' ')
         else:
             fic.write(str(liste_cercle_code_secret[i]) + "\n")
-    #for y in range(rows):
-    fic.write(str(liste_cellule) + "\n")
-    fic.write(str(liste_cercle) + "\n")
-    #for y in range(rows):
-    #    for i in range(2):
-    fic.write(str(liste_indicateurs_D_haut) + "\n")
-    fic.write(str(liste_cercle_indicateurs_D_haut) + "\n")
-    fic.write(str(liste_indicateurs_D_bas) + "\n")
-    fic.write(str(liste_cercle_indicateurs_D_bas) + "\n")
-    fic.write(str(liste_indicateurs_G_haut) + "\n")
-    fic.write(str(liste_cercle_indicateurs_G_haut) + "\n")
-    fic.write(str(liste_indicateurs_G_bas) + "\n")
-    fic.write(str(liste_cercle_indicateurs_G_bas) + "\n")
+    for y in range(rows):
+        for i in range(cols):
+            if i < 3:
+                fic.write(str(liste_cellule[y][i]) + " ")
+            else:
+                fic.write(str(liste_cellule[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(cols):
+            if i < 3:
+                fic.write(str(liste_cercle[y][i]) + " ")
+            else:
+                fic.write(str(liste_cercle[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_indicateurs_D_haut[y][i]) + " ")
+            else:
+                fic.write(str(liste_indicateurs_D_haut[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_cercle_indicateurs_D_haut[y][i]) + " ")
+            else:
+                fic.write(str(liste_cercle_indicateurs_D_haut[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_indicateurs_D_bas[y][i]) + " ")
+            else:
+                fic.write(str(liste_indicateurs_D_bas[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_cercle_indicateurs_D_bas[y][i]) + " ")
+            else:
+                fic.write(str(liste_cercle_indicateurs_D_bas[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_indicateurs_G_haut[y][i]) + " ")
+            else:
+                fic.write(str(liste_indicateurs_G_haut[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_cercle_indicateurs_G_haut[y][i]) + " ")
+            else:
+                fic.write(str(liste_cercle_indicateurs_G_haut[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_indicateurs_G_bas[y][i]) + " ")
+            else:
+                fic.write(str(liste_indicateurs_G_bas[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(2):
+            if i == 0:
+                fic.write(str(liste_cercle_indicateurs_G_bas[y][i]) + " ")
+            else:
+                fic.write(str(liste_cercle_indicateurs_G_bas[y][i]) + "\n")
+    for y in range(rows):
+        for i in range(9):
+            if i < 8:
+                fic.write(str(liste_cpt_cellule[y][i]) + " ")
+            else:
+                fic.write(str(liste_cpt_cellule[y][i]) + "\n")
+    for i in range(9):
+            if i < 8:
+                fic.write(str(liste_cpt_code[i]) + " ")
+            else:
+                fic.write(str(liste_cpt_code[i]) + "\n")
+    for i in range(rows):
+            if i < 9:
+                fic.write(str(liste_nbre_indicateur_G[i]) + " ")
+            else:
+                fic.write(str(liste_nbre_indicateur_G[i]) + "\n")
+    #for i in range(cols):
+    #        if i < 3:
+    #            fic.write(str(liste_point_interrogation_code[i]) + " ")
+    #        else:
+    #            fic.write(str(liste_point_interrogation_code[i]) + "\n")
     fic.write(str(stop) + "\n")
-    fic.write(str(cpt))
+    fic.write(str(cpt) + "\n")
+    fic.write(str(booleen) + "\n")
+    fic.write(str(relancer_partie) + "\n")
+    fic.write(str(var) + "\n")
+    fic.write(str(var2))
     fic.close()
-    liste_cpt_cellule[y][i]
-    liste_cpt_code[i]
-    bool
-    relancer_partie
-    liste_point_interrogation_code
 
-'''def charger_partie():
+def charger_partie():
+    cpt2 = 0
+    liste_transitoire = []
+    liste_test = []
+    i = 0
+    #liste_DEFINITF_cellule_code_secret = []
+    #liste_cercle_code_secret = []
     fic = open("Sauvegarde Mastermind","r")
-    for i in range(cols):
     for ligne in fic:
-        print(ligne)
+        liste_transitoire.append(ligne.split())
+        #i += 1
+        """else:
+            liste_DEFINITF_cellule_code_secret[i] = ligne.split()
+            i = 0
+            cpt2 += 1
+        if i < 3 and cpt2 == 1:
+            liste_cercle_code_secret[i] = ligne.split()
+            i += 1
+        else:
+            liste_DEFINITF_cellule_code_secret[i] = ligne.split()
+            i = 0
+            cpt2 += 1"""
+    '''for i in range(120):
+        liste_transitoire[i] = int(liste_DEFINITF_cellule_code_secret[i])
+        liste_cercle_code_secret[i] = int(liste_cercle_code_secret[i])
+    var2 = liste_transitoire[-1]
+    var = liste_transitoire[-2]
+    relancer_partie = liste_transitoire[-3]
+    booleen = liste_transitoire[-4]
+    cpt = liste_transitoire[-5]
+    stop = liste_transitoire[-6]
+    fic = open("Sauvegarde Mastermind", "r")
+    while True:
+        ligne = fic.readline()
+        if ligne == 110:
+            break
+        booleen = ligne'''
+
+    #i = 119
+    stop = 0
+    cpt = 0
+    booleen = False
+    relancer_partie = False
+    var = ''
+    var2 = ''
+
+    stop = liste_transitoire[114][0]
+    cpt = liste_transitoire[115][0]
+    booleen = liste_transitoire[116][0]
+    if booleen == 'True':
+        booleen = True
+    else:
+        booleen = False
+    #booleen = bool(booleen)
+    relancer_partie = liste_transitoire[117][0]
+    if relancer_partie == 'True':
+        relancer_partie = True
+    else:
+        relancer_partie = False
+    #relancer_partie = bool(relancer_partie)
+    for i in range(len(liste_transitoire[118])):
+        var += (liste_transitoire[118][i]) + ' '
+    for i in range(len(liste_transitoire[119])):
+        var2 += (liste_transitoire[119][i]) + ' '
+    
+    for i in range(1, 7):
+        liste_transitoire.remove(liste_transitoire[-1])
+        #liste_test.append(sum(map(sum, liste_transitoire[i])))
+        #liste_test.append(np.sum(liste_transitoire[i], axis = 1))
+    #print(var)
+    liste_transitoire = [list(map(int,i)) for i in liste_transitoire]
+    print(liste_transitoire)
+    print(var2, var, relancer_partie, booleen, cpt, stop)
+    print(type(booleen), type(relancer_partie))
+    #print(booleen)
     fic.close()   
 
-    for i in range(cols):'''
-
 def victoire_defaite():
-    global ecran_defaite, ecran_victoire, cpt
+    global ecran_defaite, ecran_victoire, cpt, var
     for y in range(rows):
         if liste_indicateurs_D_bas[y][1] == 1 and y < 4:
             ecran_victoire = canvas.create_window(WIDTH/2, HEIGHT/2, window = label_victoire)
             cpt = 11
-            tvar.set("Encore une partie ? :)")
+            var = "Encore une partie ? :)"
+            tvar.set(var)
         elif liste_indicateurs_D_bas[y][1] == 1:
             x0, y0, x1, y1 = canvas.coords(liste_cercle[y][0])
             #print(y0, y1)
             ecran_victoire = canvas.create_window(WIDTH/2, (y0 + y1)/2, window = label_victoire)
             cpt = 11
-            tvar.set("Encore une partie ? :)")
+            var = "Encore une partie ? :)"
+            tvar.set(var)
         elif cpt == 11 and liste_cellule[9][0] != 0:
             ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
 
 def nouvelle_partie():
-    global cpt, stop, relancer_partie, bool
+    global cpt, stop, relancer_partie, booleen, var, var2
     if relancer_partie == True:
         if cpt == 13 and liste_cellule[9][0] != 0:
             canvas.itemconfigure(ecran_defaite, state = 'hidden')
@@ -614,9 +757,11 @@ def nouvelle_partie():
             liste_cpt_code[i] = 0
         couleur_cellule()
         couleur_indicateurs()
-        tvar.set("Cache moi ce code ;)")
-        tvar2.set("Passer au mode 1 joueur")
-        bool = True
+        var = "Cache moi ce code ;)"
+        tvar.set(var)
+        var2 = "Passer au mode 1 joueur"
+        tvar2.set(var2)
+        booleen = True
         relancer_partie = False
         if cpt == 13 and liste_cellule[9][0] != 0:
             canvas.itemconfigure(ecran_defaite, state = 'hidden')
@@ -691,7 +836,7 @@ bouton_retour_en_arriere.grid(row = 2, column = 0)
 bouton_sauvegarde = tk.Button(racine, text = "Sauvegarder", command = sauvegarde, padx =16, pady =18, bd ='3', bg ='blue', font =("Optima", "23"), width = 10)
 bouton_sauvegarde.grid(row = 3, column = 0)
 
-bouton_charger = tk.Button(racine, text = "Charger la partie", command = retour_en_arriere, padx =18, pady =18, bg ='blue', font =("Optima", "23"), width = 10, bd = '3')
+bouton_charger = tk.Button(racine, text = "Charger la partie", command = charger_partie, padx =18, pady =18, bg ='blue', font =("Optima", "23"), width = 10, bd = '3')
 bouton_charger.grid(row = 4, column = 0)
 
 bouton_nbre_joueur = tk.Button(racine, textvariable = tvar2, command = nombre_joueur, padx =27, pady =18, bd ='3', bg ='yellow', font =("Optima", "23"), width = 9)
@@ -702,5 +847,5 @@ canvas.bind("<Button-1>", cliqueG_iteration, add='+')
 canvas.bind("<Button-2>", cliqueD_code_secret)
 canvas.bind("<Button-2>", cliqueD_iteration, add='+')
 couleur_cellule()
-#victoire()
+#victoire() 
 racine.mainloop()
