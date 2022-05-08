@@ -67,6 +67,8 @@ relancer_partie = False
 stop_clique_code_ecran_defaite = 0
 restaurer_point_interrogation = False
 
+liste_couleur_fixe = [0 for i in range(rows)]
+
 ######################### Fonctions ###############################
 def nombre_joueur():
     global stop_clique_code, cpt, Alterner_nbr_joueurs, var, var2
@@ -401,18 +403,28 @@ def couleur_indicateurs():
 
 def recommendation():
     couleur_aleatoire = random.randint(1, 8)
-    couleur_fixe = 0
+    liste_couleur_fixe.append(couleur_aleatoire)
+    couleur_aleatoire2 = random.randint(1, 8)
+    liste_couleur_fixe.append(couleur_aleatoire2)
     for y in range(rows):
         for i in range(cols):
             if y == (cpt - 1):
                 #if y == 0:
                 if liste_indicateurs_G_haut[y - 1][0] == 0 and liste_indicateurs_D_haut[y - 1][0] == 0:
-                    liste_cellule[y][i] = couleur_aleatoire
-                    couleur_fixe = couleur_aleatoire
+                    if i == 0:
+                        liste_cellule[y][i] = couleur_aleatoire
+                    elif i == 1:
+                        liste_cellule[y][i] = couleur_aleatoire
+                        liste_couleur_fixe[0] = couleur_aleatoire
+                    elif i == 2:
+                        liste_cellule[y][i] = couleur_aleatoire2
+                    else:
+                        liste_cellule[y][i] = couleur_aleatoire2
+                        liste_couleur_fixe[1] = couleur_aleatoire2
                     #print(couleur_fixe)
                 elif liste_indicateurs_D_haut[y - 1][0] == 1 and liste_indicateurs_G_haut[y - 1][0] == 0:
-                    if i < 3:
-                        liste_cellule[y][i] = couleur_fixe
+                    if i < 2:
+                        liste_cellule[y][i] = liste_couleur_fixe[0]
                     else:
                         liste_cellule[y][i] = couleur_aleatoire
                 elif liste_indicateurs_G_haut[y - 1][0] == 1:
@@ -699,7 +711,7 @@ def victoire_defaite():
             stop_clique_code_ecran_defaite = 1
         if cpt == 11 and liste_cellule[9][0] != 0 and stop_clique_code_ecran_defaite == 0:
             ecran_defaite = canvas.create_window(WIDTH/2, 1140 - (HEIGHT/2), window = label_defaite)
-print(stop_clique_code_ecran_defaite)
+
 def nouvelle_partie():
     global cpt, stop_clique_code, relancer_partie, Alterner_nbr_joueurs, var, var2, stop_clique_code_ecran_defaite
     if relancer_partie == True:
