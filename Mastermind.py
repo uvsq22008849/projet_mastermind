@@ -175,7 +175,7 @@ def cliqueD_code_secret(event):
 def cacher_code_secret():
     global liste_DEFINITF_cellule_code_secret, stop_clique_code, cpt, relancer_partie, var, restaurer_point_interrogation
     for y in range(rows):
-        if cpt == 0 and stop_clique_code < 1 and liste_cellule_code_secret[0] != 0 and liste_cellule_code_secret[1] != 0 and liste_cellule_code_secret[2] != 0 and liste_cellule_code_secret[3] != 0:
+        if cpt == 0 and liste_cellule_code_secret[0] != 0 and liste_cellule_code_secret[1] != 0 and liste_cellule_code_secret[2] != 0 and liste_cellule_code_secret[3] != 0:
             liste_DEFINITF_cellule_code_secret = list(liste_cellule_code_secret)
             for i in range(cols):
                 liste_cellule_code_secret[i] = 0
